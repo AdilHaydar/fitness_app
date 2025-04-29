@@ -43,14 +43,14 @@ const StepGoalDonut: React.FC<StepGoalDonutProps> = ({ currentSteps, targetSteps
                     strokeLinecap="round"
                 />
                 {/* İç halka */}
-                <Circle
+                {/* <Circle
                     cx="100"
                     cy="100"
                     r={radius - strokeWidth} // İç halkayı biraz daha küçük yap
                     stroke="#fff"
                     strokeWidth={strokeWidth}
                     fill="none"
-                />
+                /> */}
             </Svg>
 
             <View style={styles.gauge}>
