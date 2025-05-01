@@ -1,28 +1,25 @@
-import BottomSheet from '@gorhom/bottom-sheet';
-import { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+// StepCounter.tsx
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Pressable } from 'react-native';
 import * as Pedometer from 'expo-sensors/build/Pedometer';
 import { Card, Title, Paragraph } from 'react-native-paper';
 import StepGoalDonut from '../components/StepGoalDonut';
+import CustomBottomSheet from '../components/CustomBottomSheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 const StepCounter = () => {
     const bottomSheetRef = useRef<BottomSheet>(null);
     const snapPoints = useMemo(() => ['25%', '50%', '75%'], []);
 
     const handleOpenBottomSheet = useCallback(() => {
-        console.log("Press")
-        console.log("bottomSheetRef.current", bottomSheetRef.current);
-        // bottomSheetRef.current?.snapToIndex(0);
         bottomSheetRef.current?.expand();
     }, []);
-
+    const [stepGoal, setStepGoal] = useState(10000);
     const [isPedometerAvailable, setIsPedometerAvailable] = useState<string>('checking');
     const [currentStepCount, setCurrentStepCount] = useState<number>(0);
     const [pastStepCount, setPastStepCount] = useState<number>(0);
     const [caloriesBurned, setCaloriesBurned] = useState<number>(0);
 
-    const stepGoal = 10000; // hedef 10.000 adım
 
     useEffect(() => {
         Pedometer.isAvailableAsync().then(
@@ -32,7 +29,7 @@ const StepCounter = () => {
 
         const end = new Date();
         const start = new Date();
-        start.setHours(0, 0, 0, 0); // Bugünün başı
+        start.setHours(0, 0, 0, 0);
 
         Pedometer.getStepCountAsync(start, end).then(
             (result) => {
@@ -74,29 +71,14 @@ const StepCounter = () => {
                 <Card style={styles.card}>
                     <Card.Content>
                         <Title>Kalori Hesaplama</Title>
-                        <Paragraph>Bugün Yaktığınız Kalori: {caloriesBurned.toFixed(2)} kcal</Paragraph>
+                        <Paragraph>
+                            Bugün Yaktığınız Kalori: {caloriesBurned.toFixed(2)} kcal
+                        </Paragraph>
                     </Card.Content>
                 </Card>
             </View>
 
-            <BottomSheet
-            ref={bottomSheetRef}
-            index={-1}
-            snapPoints={snapPoints}
-            enablePanDownToClose={true}
-            backdropComponent={backdropProps => (
-                <BottomSheetBackdrop
-                {...backdropProps}
-                disappearsOnIndex={-1}
-                appearsOnIndex={0}
-                opacity={0.6} // Gölge yoğunluğu
-                />
-            )}
-            >
-                <BottomSheetView style={styles.bottomSheetContent}>
-                    <Text>Merhaba! Burada detaylar açıldı 🎯</Text>
-                </BottomSheetView>
-            </BottomSheet>
+            <CustomBottomSheet ref={bottomSheetRef} snapPoints={snapPoints} onChangeStepGoal={setStepGoal} />
         </SafeAreaView>
     );
 };
