@@ -9,6 +9,11 @@ type CustomBottomSheetProps = {
     onChangeStepGoal: (stepGoal: number) => void;
 };
 
+type CustomBottomSheetForCaloriesProps = {
+    snapPoints?: string[];
+    onChangeCaloriesGoal: (stepGoal: number) => void;
+};
+
 const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(({ snapPoints, onChangeStepGoal  }, ref) => {
     const memoizedSnapPoints = useMemo(() => snapPoints || ['25%', '50%', '75%'], [snapPoints]);
     const [inputValue, setInputValue] = useState('');
@@ -67,7 +72,66 @@ const CustomBottomSheet = forwardRef<BottomSheet, CustomBottomSheetProps>(({ sna
     );
 });
 
-export default CustomBottomSheet;
+const CustomBottomSheetForCalories = forwardRef<BottomSheet, CustomBottomSheetForCaloriesProps>(({ snapPoints, onChangeCaloriesGoal  }, ref) => {
+    const memoizedSnapPoints = useMemo(() => snapPoints || ['25%', '50%', '75%'], [snapPoints]);
+    const [inputValue, setInputValue] = useState('');
+    const handleSubmit = () => {
+        const number = parseInt(inputValue);
+        if (!isNaN(number)) {
+            onChangeCaloriesGoal(number);
+        }
+    };
+
+    return (
+        
+        <BottomSheet
+            ref={ref}
+            index={-1}
+            snapPoints={memoizedSnapPoints}
+            enablePanDownToClose={true}
+            backdropComponent={(backdropProps) => (
+                <BottomSheetBackdrop
+                    {...backdropProps}
+                    disappearsOnIndex={-1}
+                    appearsOnIndex={0}
+                    opacity={0.6}
+                />
+            )}
+        >
+            <BottomSheetView style={styles.bottomSheetContent}>
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
+
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View  style={styles.inner} >
+                            <View style={styles.row}>
+                                <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10, paddingRight: 10 }}>
+                                    Kalori Hedefi Ayarla
+                                </Text>
+                                <TextInput
+                                    style={styles.input}
+                                    keyboardType="numeric"
+                                    placeholder="Yeni kalori hedefi girin"
+                                    value={inputValue}
+                                    onChangeText={setInputValue}
+                                />
+                            </View>
+                            <View>
+                                <Button title="Hedefi Ayarla" onPress={handleSubmit} />
+                            </View>
+                            
+                        </View>
+                        
+                        
+                    </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
+            </BottomSheetView>
+        </BottomSheet>
+        
+    );
+});
+
+
+export default {CustomBottomSheet, CustomBottomSheetForCalories};
 
 const styles = StyleSheet.create({
     bottomSheetContent: {
