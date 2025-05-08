@@ -1,11 +1,12 @@
 // StepCounter.tsx
 import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Pressable, ScrollView } from 'react-native';
 import * as Pedometer from 'expo-sensors/build/Pedometer';
 import { Card, Title, Paragraph } from 'react-native-paper';
 import StepGoalDonut from '../components/StepGoalDonut';
 import BottomSheets  from '../components/CustomBottomSheet';
 import BottomSheet from '@gorhom/bottom-sheet';
+import SpeedTracker from '../components/SpeedTracker';
 
 const StepCounter = () => {
     const bottomSheetRef = useRef<BottomSheet>(null);
@@ -54,42 +55,46 @@ const StepCounter = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.grid}>
-                <Pressable
-                    onPress={handleOpenBottomSheet}
-                    style={({ pressed }) => [
-                        styles.card,
-                        { backgroundColor: pressed ? 'lightgray' : 'white' },
-                    ]}
-                >
-                    <Card style={{ backgroundColor: 'transparent', elevation: 0 }}>
-                        <Card.Content>
-                            <Title>Adım Sayısı</Title>
-                            <Paragraph>Bugün Atılan Adımlar: {pastStepCount}</Paragraph>
-                            <Paragraph>Şu Anki Adım Sayısı: {currentStepCount}</Paragraph>
-                            <StepGoalDonut currentSteps={pastStepCount} targetSteps={stepGoal} />
-                        </Card.Content>
-                    </Card>
-                </Pressable>
-                <Pressable
-                    onPress={handleOpenBottomSheetForCalories}
-                    style={({ pressed }) => [
-                        styles.card,
-                        { backgroundColor: pressed ? 'lightgray' : 'white' },
-                    ]}
-                >
-                    <Card style={{ backgroundColor: 'transparent', elevation: 0 }}>
-                        <Card.Content>
-                            <Title>Kalori Hesaplama</Title>
-                            <Paragraph>
-                                Bugün Yaktığınız Kalori: {caloriesBurned.toFixed(2)} kcal
-                            </Paragraph>
-                            <StepGoalDonut currentSteps={caloriesBurned} targetSteps={caloriesGoal} />
-                        </Card.Content>
-                    </Card>
-                </Pressable>
-            </View>
-
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+                <View style={styles.grid}>
+                    <Pressable
+                        onPress={handleOpenBottomSheet}
+                        style={({ pressed }) => [
+                            styles.card,
+                            { backgroundColor: pressed ? 'lightgray' : 'white' },
+                        ]}
+                    >
+                        <Card style={{ backgroundColor: 'transparent', elevation: 0 }}>
+                            <Card.Content>
+                                <Title>Adım Sayısı</Title>
+                                <Paragraph>Bugün Atılan Adımlar: {pastStepCount}</Paragraph>
+                                <Paragraph>Şu Anki Adım Sayısı: {currentStepCount}</Paragraph>
+                                <StepGoalDonut currentSteps={pastStepCount} targetSteps={stepGoal} />
+                            </Card.Content>
+                        </Card>
+                    </Pressable>
+                    <Pressable
+                        onPress={handleOpenBottomSheetForCalories}
+                        style={({ pressed }) => [
+                            styles.card,
+                            { backgroundColor: pressed ? 'lightgray' : 'white' },
+                        ]}
+                    >
+                        <Card style={{ backgroundColor: 'transparent', elevation: 0 }}>
+                            <Card.Content>
+                                <Title>Kalori Hesaplama</Title>
+                                <Paragraph>
+                                    Bugün Yaktığınız Kalori: {caloriesBurned.toFixed(2)} kcal
+                                </Paragraph>
+                                <StepGoalDonut currentSteps={caloriesBurned} targetSteps={caloriesGoal} />
+                            </Card.Content>
+                        </Card>
+                    </Pressable>
+                </View>
+                <View style={styles.grid}>
+                    <SpeedTracker />
+                </View>
+            </ScrollView>
             <BottomSheets.CustomBottomSheet ref={bottomSheetRef} snapPoints={snapPoints} onChangeStepGoal={setStepGoal} />
             <BottomSheets.CustomBottomSheetForCalories ref={bottomSheetRefForCalories} snapPoints={snapPoints} onChangeCaloriesGoal={setCaloriesGoal} />
         </SafeAreaView>

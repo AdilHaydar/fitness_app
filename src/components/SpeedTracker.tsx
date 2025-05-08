@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, TextInput, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
+import { Text, View, TextInput, StyleSheet, KeyboardAvoidingView, Platform, Keyboard } from 'react-native';
 import * as Location from 'expo-location';
 
 const SpeedTracker = () => {
@@ -8,6 +8,7 @@ const SpeedTracker = () => {
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const [weight, setWeight] = useState<string>('70'); // kg (string input)
     const [tracking, setTracking] = useState(false);
+    const [isInputFocused, setIsInputFocused] = useState(false);
 
     useEffect(() => {
         let lastTimestamp = Date.now();
@@ -47,8 +48,8 @@ const SpeedTracker = () => {
                         const kcal = MET * userWeight * hours;
                         setCalories((prev) => prev + kcal);
                     }
-
-                    setSpeed(currentSpeed);
+                    console.log(currentSpeed, 'm/s');
+                    setSpeed(currentSpeed !== null && currentSpeed >= 0 ? currentSpeed : 0);
                 }
             );
         };
@@ -59,6 +60,7 @@ const SpeedTracker = () => {
 
         return () => {
             locationSubscription?.remove();
+            setSpeed(null);
         };
     }, [tracking, weight]);
 
@@ -71,6 +73,11 @@ const SpeedTracker = () => {
             <TextInput
                 style={styles.input}
                 keyboardType="numeric"
+                returnKeyType="done"
+                blurOnSubmit={true}
+                onFocus={() => setIsInputFocused(true)}
+                onBlur={() => setIsInputFocused(false)}
+                onSubmitEditing={() => Keyboard.dismiss()}
                 value={weight}
                 onChangeText={setWeight}
                 placeholder="Örn: 70"
@@ -92,6 +99,11 @@ const SpeedTracker = () => {
             </Text>
 
             {errorMsg && <Text style={{ color: 'red' }}>{errorMsg}</Text>}
+            {isInputFocused && (
+                <View style={styles.floatingPreview}>
+                    <Text style={styles.previewText}>Girdiğiniz değer: {weight}</Text>
+                </View>
+            )}
         </KeyboardAvoidingView>
     );
 };
@@ -130,5 +142,24 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         fontWeight: 'bold',
+    },
+    floatingPreview: {
+        position: 'absolute',
+        bottom: Platform.OS === 'ios' ? 300 : 100, // Klavyeye göre ayarlanabilir
+        left: 20,
+        right: 20,
+        backgroundColor: '#fff',
+        padding: 12,
+        borderRadius: 8,
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 4,
+        elevation: 5,
+        alignItems: 'center',
+    },
+    previewText: {
+        fontSize: 16,
+        fontWeight: '600',
     },
 });
