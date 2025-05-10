@@ -66,7 +66,7 @@ const StepCounter = () => {
                     >
                         <Card style={{ backgroundColor: 'transparent', elevation: 0 }}>
                             <Card.Content>
-                                <Title>Adım Sayısı</Title>
+                                <Title style={{ textAlign: 'center' }}>Adım Sayısı</Title>
                                 <Paragraph>Bugün Atılan Adımlar: {pastStepCount}</Paragraph>
                                 <Paragraph>Şu Anki Adım Sayısı: {currentStepCount}</Paragraph>
                                 <StepGoalDonut currentSteps={pastStepCount} targetSteps={stepGoal} />
@@ -82,7 +82,7 @@ const StepCounter = () => {
                     >
                         <Card style={{ backgroundColor: 'transparent', elevation: 0 }}>
                             <Card.Content>
-                                <Title>Kalori Hesaplama</Title>
+                                <Title style={{ textAlign: 'center' }}>Kalori Hesaplama</Title>
                                 <Paragraph>
                                     Bugün Yaktığınız Kalori: {caloriesBurned.toFixed(2)} kcal
                                 </Paragraph>
@@ -92,7 +92,14 @@ const StepCounter = () => {
                     </Pressable>
                 </View>
                 <View style={styles.grid}>
-                    <SpeedTracker />
+                <Pressable style={styles.cardFullWidth}>
+                    <Card style={{ backgroundColor: 'transparent', elevation: 0 }}>
+                        <Card.Content>
+                            <Title style={{ textAlign: 'center' }}>Hız ve Kalori Takibi</Title>
+                            <SpeedTracker />
+                        </Card.Content>
+                    </Card>
+                </Pressable>
                 </View>
             </ScrollView>
             <BottomSheets.CustomBottomSheet ref={bottomSheetRef} snapPoints={snapPoints} onChangeStepGoal={setStepGoal} />
@@ -131,6 +138,15 @@ const styles = StyleSheet.create({
         padding: 15,
         elevation: 4,
     },
+    cardFullWidth: {
+        width: '100%',
+        marginBottom: 20,
+        borderRadius: 10,
+        backgroundColor: '#fff',
+        padding: 15,
+        elevation: 4,
+    },
+
     bottomSheetContent: {
         flex: 1,
         alignItems: 'center',

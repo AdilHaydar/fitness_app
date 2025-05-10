@@ -48,7 +48,6 @@ const SpeedTracker = () => {
                         const kcal = MET * userWeight * hours;
                         setCalories((prev) => prev + kcal);
                     }
-                    console.log(currentSpeed, 'm/s');
                     setSpeed(currentSpeed !== null && currentSpeed >= 0 ? currentSpeed : 0);
                 }
             );
@@ -85,7 +84,7 @@ const SpeedTracker = () => {
 
             <Text style={styles.label}>Hızınız:</Text>
             <Text style={styles.value}>
-                {speed !== null ? (speed * 3.6).toFixed(2) + ' km/s' : 'Hesaplanıyor...'}
+                {speed !== null ? (speed * 3.6).toFixed(2) + ' km/s' : 'Ölçüm için Takibi Başlatın'} 
             </Text>
 
             <Text style={styles.label}>Yakılan Kalori:</Text>
@@ -113,9 +112,7 @@ export default SpeedTracker;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 60,
         paddingHorizontal: 20,
-        backgroundColor: '#f7f7f7',
     },
     label: {
         fontSize: 18,
