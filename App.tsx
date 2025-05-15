@@ -7,12 +7,14 @@ import { Ionicons } from '@expo/vector-icons';
 import WorkoutScreen from './src/screens/WorkoutScreen';
 import StepCounter from './src/screens/StepCounter';
 import SettingsScreen from './src/screens/SettingsScreen';
+import SupplementScreen from './src/screens/SuplementScreen';
 
 const Tab = createBottomTabNavigator();
 const icons = {
   Home: 'walk',
   Settings: 'settings',
   Workout: 'barbell',
+  Suplement: 'medkit',
 } as const;
 export default function App() {
   return (
@@ -28,8 +30,9 @@ export default function App() {
         })}
       >
           <Tab.Screen name="Home" component={StepCounter} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Suplement" component={SupplementScreen} />
           <Tab.Screen name="Workout" component={WorkoutScreen} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
