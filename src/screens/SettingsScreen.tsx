@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const SettingsScreen = () => {
+const WorkoutScreen = () => {
     return (
         <View style={styles.container}>
             <Text>Ayarlar Ekranı</Text>
@@ -9,7 +9,7 @@ const SettingsScreen = () => {
     );
 };
 
-export default SettingsScreen;
+export default WorkoutScreen;
 
 const styles = StyleSheet.create({
     container: {
